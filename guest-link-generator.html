@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guest Link Generator Pernikahan - Rakha & Eny</title>
+  <meta name="description" content="Generator link undangan pernikahan personal untuk Rakha & Eny." />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { min-height: 100vh; display: grid; place-items: center; padding: 24px; }
+    .generator-page { width: min(920px, 100%); }
+    .generator-card { padding: clamp(28px, 5vw, 56px); border: 1px solid rgba(215, 170, 100, .32); border-radius: 42px; background: rgba(255, 250, 242, .82); box-shadow: var(--shadow); }
+    .generator-logo { width: 128px; margin: 0 auto 18px; }
+    .generator-card h1 { margin: 10px 0 14px; text-align: center; font-family: var(--serif); font-size: clamp(3rem, 9vw, 6rem); line-height: .9; color: var(--brown); }
+    .generator-card > p { width: min(650px, 100%); margin: 0 auto 34px; text-align: center; color: var(--muted); line-height: 1.75; }
+    .generator-form { display: grid; gap: 16px; }
+    .generator-form label { display: grid; gap: 8px; color: var(--brown); font-weight: 800; }
+    .generator-form input, .generator-form textarea { width: 100%; padding: 14px 16px; border: 1px solid rgba(92, 70, 56, .18); border-radius: 18px; background: rgba(255, 255, 255, .74); outline: none; }
+    .generator-form input:focus, .generator-form textarea:focus { border-color: rgba(215, 170, 100, .82); box-shadow: 0 0 0 4px rgba(215, 170, 100, .14); }
+    .generator-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+    .result-box { margin-top: 24px; padding: 18px; border: 1px solid rgba(92, 70, 56, .14); border-radius: 24px; background: rgba(255,255,255,.56); word-break: break-word; color: var(--muted); line-height: 1.7; }
+    .back-link { display: inline-flex; margin-top: 18px; color: var(--brown); font-weight: 800; }
+    @media (max-width: 520px) { .generator-actions { flex-direction: column; } }
+  </style>
+</head>
+<body>
+  <main class="generator-page">
+    <section class="generator-card">
+      <img src="assets/images/brand-mark.svg" alt="Logo Rakha dan Eny" class="generator-logo" />
+      <p class="eyebrow" style="text-align:center">Guest Link Generator</p>
+      <h1>Rakha & Eny</h1>
+      <p>Gunakan halaman ini untuk membuat link undangan pernikahan personal. Masukkan domain website dan nama tamu, lalu salin link atau pesan WhatsApp.</p>
+
+      <form class="generator-form" id="generatorForm">
+        <label>
+          Link Website Undangan
+          <input type="url" id="baseUrl" placeholder="https://domainkamu.com" required />
+        </label>
+        <label>
+          Nama Tamu
+          <input type="text" id="guestName" placeholder="Contoh: Bapak Andi dan Keluarga" required />
+        </label>
+        <label>
+          Pesan WhatsApp
+          <textarea id="waMessage" rows="5">Assalamu'alaikum warahmatullahi wabarakatuh.
+
+Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk hadir dalam acara pernikahan Rakha & Eny.
+
+Silakan buka undangan melalui link berikut:</textarea>
+        </label>
+        <div class="generator-actions">
+          <button class="btn btn-primary" type="submit">Buat Link</button>
+          <button class="btn btn-outline" type="button" id="copyLink">Salin Link</button>
+          <button class="btn btn-outline" type="button" id="copyWa">Salin Pesan WA</button>
+        </div>
+      </form>
+
+      <div class="result-box" id="resultBox">Link personal akan tampil di sini.</div>
+      <a class="back-link" href="index.html">← Kembali ke undangan</a>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const form = document.querySelector("#generatorForm");
+    const baseUrlInput = document.querySelector("#baseUrl");
+    const guestNameInput = document.querySelector("#guestName");
+    const waMessageInput = document.querySelector("#waMessage");
+    const resultBox = document.querySelector("#resultBox");
+    const copyLinkButton = document.querySelector("#copyLink");
+    const copyWaButton = document.querySelector("#copyWa");
+
+    function showToast(message) {
+      const toast = document.querySelector("#toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2600);
+    }
+
+    async function copyText(text, successMessage) {
+      if (!text || text.includes("akan tampil")) {
+        showToast("Buat link terlebih dahulu.");
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (error) {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        textarea.remove();
+      }
+      showToast(successMessage);
+    }
+
+    function normalizeUrl(value) {
+      const trimmed = value.trim();
+      if (!trimmed) return "";
+      const withProtocol = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+      return withProtocol.replace(/\/$/, "");
+    }
+
+    function buildLink() {
+      const baseUrl = normalizeUrl(baseUrlInput.value);
+      const guestName = guestNameInput.value.trim();
+      if (!baseUrl || !guestName) return "";
+      return `${baseUrl}/index.html?to=${encodeURIComponent(guestName)}`;
+    }
+
+    function buildWaText() {
+      const link = buildLink();
+      const message = waMessageInput.value.trim();
+      const guestName = guestNameInput.value.trim();
+      return `${message}\n\nKepada Yth. ${guestName}\n${link}`;
+    }
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const link = buildLink();
+      if (!link) return;
+      resultBox.textContent = link;
+      showToast("Link personal berhasil dibuat.");
+    });
+
+    copyLinkButton.addEventListener("click", () => copyText(resultBox.textContent, "Link personal berhasil disalin."));
+    copyWaButton.addEventListener("click", () => copyText(buildWaText(), "Pesan WhatsApp berhasil disalin."));
+  </script>
+</body>
+</html>
