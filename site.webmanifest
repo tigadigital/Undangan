@@ -1,0 +1,11 @@
+{
+  "name": "Undangan Pernikahan Rakha & Eny",
+  "short_name": "Rakha & Eny",
+  "start_url": "https://tigadigital.github.io/Undangan/",
+  "scope": "https://tigadigital.github.io/Undangan/",
+  "display": "standalone",
+  "background_color": "#fffaf2",
+  "theme_color": "#5c4638",
+  "description": "Undangan pernikahan digital Rakha & Eny. Temukan kisah cinta, detail akad dan resepsi, galeri momen, lokasi acara, serta RSVP online dalam satu undangan elegan.",
+  "lang": "id-ID"
+}

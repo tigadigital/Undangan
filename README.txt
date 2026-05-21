@@ -82,3 +82,34 @@ assets/images/qr-undangan.png
 CARA HOSTING CEPAT:
 - Bisa upload folder ini ke Netlify, Vercel, GitHub Pages, atau hosting biasa.
 - Pastikan struktur folder tidak berubah.
+
+
+UPDATE SEO DOMAIN:
+Domain utama sudah diatur ke:
+https://tigadigital.github.io/Undangan/
+
+SEO TITLE:
+Undangan Pernikahan Rakha & Eny | Wedding Invitation Digital
+
+META DESCRIPTION:
+Undangan pernikahan digital Rakha & Eny. Temukan kisah cinta, detail akad dan resepsi, galeri momen, lokasi acara, serta RSVP online dalam satu undangan elegan.
+
+OPEN GRAPH / WHATSAPP DESCRIPTION:
+Dengan penuh rasa syukur, Rakha & Eny mengundang Bapak/Ibu/Saudara/i untuk hadir dan memberikan doa restu pada hari pernikahan kami.
+
+GAMBAR PREVIEW SEO:
+assets/images/og-rakha-eny.jpg
+Ukuran: 1200 x 630 px
+Dipakai untuk preview WhatsApp, Facebook, X/Twitter, dan link sharing.
+
+FILE SEO TAMBAHAN:
+- robots.txt
+- sitemap.xml
+- site.webmanifest
+- SEO-DESKRIPSI.txt
+
+CATATAN GITHUB PAGES:
+Upload isi folder ke repository GitHub Pages dengan path /Undangan/.
+Pastikan file index.html berada langsung di root folder Undangan.
+Setelah online, buka:
+https://tigadigital.github.io/Undangan/
